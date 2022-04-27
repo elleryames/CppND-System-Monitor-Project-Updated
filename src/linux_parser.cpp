@@ -46,7 +46,7 @@ string LinuxParser::Kernel() {
   return kernel;
 }
 
-// BONUS: Update this to use std::filesystem
+// BONUS: Update this to use std::filesystem (available in gcc-17, and provides a cleaner solution)
 vector<int> LinuxParser::Pids() {
   vector<int> pids;
   DIR* directory = opendir(kProcDirectory.c_str());
@@ -67,12 +67,15 @@ vector<int> LinuxParser::Pids() {
 }
 
 // TODO: Read and return the system memory utilization
+// See data in /proc/meminfo
 float LinuxParser::MemoryUtilization() { return 0.0; }
 
 // TODO: Read and return the system uptime
+// See file /proc/uptime
 long LinuxParser::UpTime() { return 0; }
 
 // TODO: Read and return the number of jiffies for the system
+// A jiffie is a unit of time used by the OS. 
 long LinuxParser::Jiffies() { return 0; }
 
 // TODO: Read and return the number of active jiffies for a PID
@@ -86,12 +89,15 @@ long LinuxParser::ActiveJiffies() { return 0; }
 long LinuxParser::IdleJiffies() { return 0; }
 
 // TODO: Read and return CPU utilization
+// Mmmm... what might this vector of strings represent?
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
 // TODO: Read and return the total number of processes
+// See bottom of file /proc/stat
 int LinuxParser::TotalProcesses() { return 0; }
 
 // TODO: Read and return the number of running processes
+// See bottom of file /proc/stat
 int LinuxParser::RunningProcesses() { return 0; }
 
 // TODO: Read and return the command associated with a process
