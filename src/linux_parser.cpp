@@ -72,7 +72,18 @@ float LinuxParser::MemoryUtilization() { return 0.0; }
 
 // TODO: Read and return the system uptime
 // See file /proc/uptime
-long LinuxParser::UpTime() { return 0; }
+long LinuxParser::UpTime() { 
+  string uptime, idle;
+  string line;
+  std::ifstream stream(kProcDirectory + kUptimeFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    linestream >> uptime >> idle;
+    return stol(uptime);
+  }
+  return 0; 
+}
 
 // TODO: Read and return the number of jiffies for the system
 // A jiffie is a unit of time used by the OS. 
