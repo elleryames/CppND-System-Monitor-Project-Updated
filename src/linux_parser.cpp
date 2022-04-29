@@ -100,8 +100,21 @@ long LinuxParser::ActiveJiffies() { return 0; }
 long LinuxParser::IdleJiffies() { return 0; }
 
 // TODO: Read and return CPU utilization
-// Mmmm... what might this vector of strings represent?
-vector<string> LinuxParser::CpuUtilization() { return {}; }
+// Reads first line of proc/stat and returns vector of strings representing cpuTimes from each column.
+vector<string> LinuxParser::CpuUtilization() { 
+  std::vector<string> cpuTimes;
+  string line, cpuTime, cpu;
+  std::ifstream stream(kProcDirectory + kStatFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    linestream >> cpu;
+    while(linestream >> cpuTime){
+        cpuTimes.push_back(cpuTime);
+    }
+  }    
+  return cpuTimes; 
+}
 
 // TODO: Read and return the total number of processes
 // See bottom of file /proc/stat

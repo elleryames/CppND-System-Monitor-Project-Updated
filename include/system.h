@@ -21,7 +21,7 @@ class System {
   // TODO: Define any necessary private members
   // These process objects need to be instantiated. Either in method Cpu, or in init list etc. 
  private:
-  Processor cpu_ = {};
+  Processor cpu_;
   std::vector<Process> processes_ = {};
 };
 
