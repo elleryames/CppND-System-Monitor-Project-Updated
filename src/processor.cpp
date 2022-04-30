@@ -44,3 +44,12 @@ float Processor::Utilization() {
 
   return cpuUtil; 
 }
+
+// TODO:
+//  Processor::Processor(){
+//         Compute nonIdle, total;
+//         Save/initialize persisted values
+// } 
+//  void UpdatePrevValues(long nonIdle, long total)
+//  int  ComputeNonIdle()
+//  int  ComputeTotal()
