@@ -21,7 +21,7 @@ string LinuxParser::ReadValue(const string file_path, const string key){
         if (key_ == key) { return value_; }
     }
   }
-  return string {};
+  return string();
 }
 
 // DONE: An example of how to read data from the filesystem
@@ -203,11 +203,30 @@ string LinuxParser::Ram(int pid) {
 
 // TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Uid(int pid) { 
+  string file_path = kProcDirectory + std::to_string(pid) + kStatusFilename;
+  return ReadValue(file_path, "Uid:"); 
+}
 
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::User(int pid) { 
+
+  string uid = Uid(pid);
+
+  string line, key, value, username, x, uid_, rest;
+  std::ifstream filestream(kPasswordPath);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream linestream(line);
+      while (linestream >> username >> x >> uid_ >> rest) {
+        if (uid_ == uid) { return username; }
+      }
+    }
+  }
+  return string(); 
+}
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
