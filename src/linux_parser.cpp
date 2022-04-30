@@ -11,6 +11,19 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+string LinuxParser::ReadValue(const string file_path, const string key){
+  string key_, value_, line_;
+  std::ifstream stream(file_path);
+  if (stream.is_open()) {
+    while (std::getline(stream, line_)){
+        std::istringstream linestream(line_);
+        linestream >> key_ >> value_;
+        if (key_ == key) { return value_; }
+    }
+  }
+  return string {};
+}
+
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
@@ -137,16 +150,10 @@ vector<string> LinuxParser::CpuUtilization() {
 
 // TODO: Read and return the total number of processes
 // See bottom of file /proc/stat
-int LinuxParser::TotalProcesses() { 
-  string key, value;
-  string line;
-  std::ifstream stream(kProcDirectory + kStatFilename);
-  if (stream.is_open()) {
-    while (std::getline(stream, line)){
-        std::istringstream linestream(line);
-        linestream >> key >> value;
-        if (key == "processes") { return stoi(value); }
-    }
+int LinuxParser::TotalProcesses() {
+  string value_ = ReadValue(kProcDirectory + kStatFilename, "processes");
+  if (!value_.empty()){
+    return stoi(value_);
   }
   return 0; 
 }
@@ -154,16 +161,11 @@ int LinuxParser::TotalProcesses() {
 // TODO: Read and return the number of running processes
 // See bottom of file /proc/stat
 int LinuxParser::RunningProcesses() {
-  string key, value;
-  string line;
-  std::ifstream stream(kProcDirectory + kStatFilename);
-  if (stream.is_open()) {
-    while (std::getline(stream, line)){
-        std::istringstream linestream(line);
-        linestream >> key >> value;
-        if (key == "procs_running") { return stoi(value); }
-    }
+  string value_ = ReadValue(kProcDirectory + kStatFilename, "procs_running");
+  if (!value_.empty()){
+    return stoi(value_);
   }
+  return 0; 
   return 0; 
 }
 
