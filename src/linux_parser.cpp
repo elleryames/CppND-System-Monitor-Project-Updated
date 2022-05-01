@@ -24,6 +24,21 @@ string LinuxParser::ReadValue(const string file_path, const string key){
   return string();
 }
 
+// Returns first row in file_path as vector of strings.
+vector<string> LinuxParser::ReadSingleRow(string file_path) { 
+  string line, val;
+  vector<string> values;
+  std::ifstream stream(file_path);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);    
+    while(linestream >> val){
+        values.push_back(val);
+    }
+  }
+  return values;
+}
+
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
@@ -229,37 +244,9 @@ string LinuxParser::User(int pid) {
   return string(); 
 }
 
-// Returns first row in file_path as vector of strings.
-vector<string> LinuxParser::ReadSingleRow(string file_path) { 
-  string line, val;
-  vector<string> values;
-  std::ifstream stream(file_path);
-  if (stream.is_open()) {
-    std::getline(stream, line);
-    std::istringstream linestream(line);    
-    while(linestream >> val){
-        values.push_back(val);
-    }
-  }
-  return values;
-}
-
-
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid) { 
-  // string line, val;
-  // vector<string> values;
-  // // get time in clock-ticks.
-  // // file /proc/[pid]/stat consists of one-line
-  // std::ifstream stream(kProcDirectory + to_string(pid) + kStatFilename);
-  // if (stream.is_open()) {
-  //   std::getline(stream, line);
-  //   std::istringstream linestream(line);    
-  //   while(linestream >> val){
-  //       values.push_back(val);
-  //   }
-  // }
   // Get process timing info (clock ticks) from /proc/pid/stat
   const string file_path = kProcDirectory + to_string(pid) + kStatFilename;
   const vector<string> values = ReadSingleRow(file_path);
