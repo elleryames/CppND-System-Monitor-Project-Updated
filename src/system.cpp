@@ -3,6 +3,8 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <functional>
 
 #include "process.h"
 #include "processor.h"
@@ -30,7 +32,16 @@ Processor& System::Cpu() {
 }
 
 // TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() { return processes_; }
+vector<Process>& System::Processes() { 
+    
+    //FIXME: sort is failing with error:
+    // error: use of deleted function ‘Process& Process::operator=(Process&&)’
+
+    // sort processes using class operator <.
+    // std::sort(processes_.begin(), processes_.end(), std::less<Process>());    
+    
+    return processes_; 
+}
 
 // TODO: Return the system's kernel identifier (string)
 std::string System::Kernel() { 

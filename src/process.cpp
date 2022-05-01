@@ -55,5 +55,9 @@ long int Process::UpTime() const { return LinuxParser::UpTime(pid_); }
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
 bool Process::operator<(Process const& a) const {
-     return this->CpuUtilization() < a.CpuUtilization(); 
+    // first sort on CPU and then on PID.
+    if (this->CpuUtilization() != a.CpuUtilization()){
+        return this->CpuUtilization() < a.CpuUtilization(); 
+    }
+    return this->Pid() < a.Pid();
 }
