@@ -55,6 +55,7 @@ long UpTime(int pid);
 
 // Helper functions
 std::string ReadValue(const std::string file_path, const std::string key); 
+std::vector<std::string> ReadSingleRow(const std::string file_path);
 };  // namespace LinuxParser
 
 #endif

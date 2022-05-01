@@ -8,6 +8,7 @@
 #include "linux_parser.h"
 
 using std::string;
+using std::stol;
 using std::to_string;
 using std::vector;
 
@@ -15,7 +16,24 @@ using std::vector;
 int Process::Pid() { return pid_; }
 
 // TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { return 0; }
+float Process::CpuUtilization() { 
+    // Get processor timing info (clock ticks) from /proc/pid/stat
+    string file_path = LinuxParser::kProcDirectory + to_string(pid_) + LinuxParser::kStatFilename;
+    vector<string> values = LinuxParser::ReadSingleRow( file_path);
+
+    // tottime = utime + stime + cutime + cstime
+    long int tottime = stol(values[13]) 
+                     + stol(values[14])
+                     + stol(values[15])
+                     + stol(values[16]);
+    tottime *= 1. / sysconf(_SC_CLK_TCK);
+
+    // get time (seconds) that process has been running
+    long int runtime = Process::UpTime();
+
+    // cpu utilization is fraction of run time using cpu.
+    return tottime / runtime; 
+}
 
 // TODO: Return the command that generated this process
 string Process::Command() { 
