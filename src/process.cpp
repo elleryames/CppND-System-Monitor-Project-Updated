@@ -73,7 +73,6 @@ bool Process::operator<(Process const& a) const {
     if (cpu_util_ != a.cpu_util_){
         return cpu_util_ < a.cpu_util_; 
     }
-    return this->Pid() < a.Pid();
-    //return cpu_util_ < a.cpu_util_;
+    return pid_ < a.pid_;
     //return true;
 }
