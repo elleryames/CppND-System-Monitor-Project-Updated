@@ -38,8 +38,7 @@ vector<Process>& System::Processes() {
     // error: use of deleted function ‘Process& Process::operator=(Process&&)’
 
     // sort processes using class operator <.
-    // std::sort(processes_.begin(), processes_.end(), std::less<Process>());    
-    
+    // std::sort(processes_.begin(), processes_.end(), std::less<Process>());
     return processes_; 
 }
 

@@ -12,11 +12,16 @@ using std::stol;
 using std::to_string;
 using std::vector;
 
+// Constructor
+Process::Process(int pid) : pid_(pid) {
+    cpu_util_ = Process::CpuUtilization();
+};
+
 // TODO: Return this process's ID
 int Process::Pid() const { return pid_; }
 
 // TODO: Return this process's CPU utilization
-float Process::CpuUtilization() const { 
+float Process::CpuUtilization() { 
     // Get processor timing info (clock ticks) from /proc/pid/stat
     string file_path = LinuxParser::kProcDirectory + to_string(pid_) + LinuxParser::kStatFilename;
     vector<string> values = LinuxParser::ReadSingleRow( file_path);
@@ -32,7 +37,10 @@ float Process::CpuUtilization() const {
     long int runtime = Process::UpTime();
 
     // cpu utilization is fraction of run time using cpu.
-    return tottime / runtime; 
+    if (runtime != 0){
+        return tottime / runtime;
+    }
+    return 0.0;
 }
 
 // TODO: Return the command that generated this process
@@ -56,8 +64,10 @@ long int Process::UpTime() const { return LinuxParser::UpTime(pid_); }
 // REMOVE: [[maybe_unused]] once you define the function
 bool Process::operator<(Process const& a) const {
     // first sort on CPU and then on PID.
-    if (this->CpuUtilization() != a.CpuUtilization()){
-        return this->CpuUtilization() < a.CpuUtilization(); 
-    }
-    return this->Pid() < a.Pid();
+    // if (this->CpuUtilization() != a.CpuUtilization()){
+    //     return this->CpuUtilization() < a.CpuUtilization(); 
+    // }
+    //return this->Pid() < a.Pid();
+    // return cpu_util_ < a.cpu_util_;
+    return true;
 }
