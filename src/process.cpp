@@ -31,16 +31,22 @@ float Process::CpuUtilization() {
                      + stol(values[14])
                      + stol(values[15])
                      + stol(values[16]);
-    tottime *= 1. / sysconf(_SC_CLK_TCK);
+    tottime = tottime / sysconf(_SC_CLK_TCK);
 
     // get time (seconds) that process has been running
     long int runtime = Process::UpTime();
 
     // cpu utilization is fraction of run time using cpu.
-    if (runtime != 0){
-        return tottime / runtime;
+    float cpu = 0.0;
+    try
+    {
+        cpu = static_cast<float>(tottime) / runtime;
     }
-    return 0.0;
+    catch(...)
+    {
+        cpu = 0.0;
+    }
+    return cpu;
 }
 
 // TODO: Return the command that generated this process
@@ -64,10 +70,10 @@ long int Process::UpTime() const { return LinuxParser::UpTime(pid_); }
 // REMOVE: [[maybe_unused]] once you define the function
 bool Process::operator<(Process const& a) const {
     // first sort on CPU and then on PID.
-    // if (this->CpuUtilization() != a.CpuUtilization()){
-    //     return this->CpuUtilization() < a.CpuUtilization(); 
-    // }
-    //return this->Pid() < a.Pid();
-    // return cpu_util_ < a.cpu_util_;
-    return true;
+    if (cpu_util_ != a.cpu_util_){
+        return cpu_util_ < a.cpu_util_; 
+    }
+    return this->Pid() < a.Pid();
+    //return cpu_util_ < a.cpu_util_;
+    //return true;
 }
