@@ -18,6 +18,7 @@ public:
   int RunningProcesses();             // TODO: See src/system.cpp
   std::string Kernel();               // TODO: See src/system.cpp
   std::string OperatingSystem();      // TODO: See src/system.cpp
+  void InitProcesses();
 
   // TODO: Define any necessary private members
   // These process objects need to be instantiated. Either in method Cpu, or in init list etc. 

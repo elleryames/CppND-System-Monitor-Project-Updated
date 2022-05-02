@@ -16,14 +16,8 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-System::System(){
-
-    // initialize each process with its PID.
-    vector<int> pids = LinuxParser::Pids();
-    for (auto& pid : pids){
-        processes_.push_back(Process(pid));
-    }
-
+System::System(){ 
+    InitProcesses(); 
 }
 
 // TODO: Return the system's CPU
@@ -31,14 +25,25 @@ Processor& System::Cpu() {
     return cpu_; 
 }
 
+// Initialize each process with its PID.
+void System::InitProcesses(){
+    vector<int> pids = LinuxParser::Pids();
+    for (auto& pid : pids){
+        processes_.push_back(Process(pid));
+    }
+}
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
-    
+
+    // refresh processes list
+    processes_.clear();
+    InitProcesses();
+
     //FIXME: sort is failing with error:
     // error: use of deleted function ‘Process& Process::operator=(Process&&)’
-
+    
     // sort processes using class operator <.
-    // std::sort(processes_.begin(), processes_.end(), std::less<Process>());
+    //std::sort(processes_.begin(), processes_.end(), std::less<Process>());
     return processes_; 
 }
 
