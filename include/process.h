@@ -19,8 +19,8 @@ public:
 
   // TODO: Declare any necessary private members
 private:
-  const int pid_;
-  float cpu_util_;
+  int pid_;
+  float cpu_util_ {0.0};
 };
 
 #endif

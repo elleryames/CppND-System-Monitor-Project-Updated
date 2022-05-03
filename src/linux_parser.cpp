@@ -117,7 +117,7 @@ float LinuxParser::MemoryUtilization() {
   return static_cast<float>(MemUsed - (Buffers + Cached)) / MemTotal;
 }
 
-// TODO: Read and return the system uptime
+// TODO: Read and return the system uptime in seconds
 // See file /proc/uptime
 long LinuxParser::UpTime() { 
   string uptime, idle;
