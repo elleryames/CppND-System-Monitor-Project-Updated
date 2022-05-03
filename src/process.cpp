@@ -24,7 +24,7 @@ int Process::Pid() const { return pid_; }
 float Process::CpuUtilization() { 
     // Get processor timing info (clock ticks) from /proc/pid/stat
     string file_path = LinuxParser::kProcDirectory + to_string(pid_) + LinuxParser::kStatFilename;
-    vector<string> values = LinuxParser::ReadSingleRow( file_path);
+    vector<string> values = LinuxParser::ReadSingleRow(file_path);
 
     // tottime = utime + stime + cutime + cstime
     long int tottime = stol(values[13]) 

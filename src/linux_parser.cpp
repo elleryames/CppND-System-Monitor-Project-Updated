@@ -119,7 +119,7 @@ float LinuxParser::MemoryUtilization() {
 
 // TODO: Read and return the system uptime in seconds
 // See file /proc/uptime
-long LinuxParser::UpTime() { 
+long int LinuxParser::UpTime() { 
   string uptime, idle;
   string line;
   std::ifstream stream(kProcDirectory + kUptimeFilename);
@@ -246,12 +246,12 @@ string LinuxParser::User(int pid) {
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid) { 
+long int LinuxParser::UpTime(int pid) { 
   // Get process timing info (clock ticks) from /proc/pid/stat
   const string file_path = kProcDirectory + to_string(pid) + kStatFilename;
   const vector<string> values = ReadSingleRow(file_path);
 
   // starttime is the 22nd entry in the file.
-  long proc_starttime = stol(values[21]) / sysconf(_SC_CLK_TCK);
+  long int proc_starttime = stol(values[21]) / sysconf(_SC_CLK_TCK);
   return UpTime() - proc_starttime;
 }

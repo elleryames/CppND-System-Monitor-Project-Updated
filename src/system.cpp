@@ -44,6 +44,7 @@ vector<Process>& System::Processes() {
 
     // sort processes using class operator <.
     std::sort(processes_.begin(), processes_.end(), std::less<Process>());
+    std::reverse(processes_.begin(), processes_.end());
     return processes_; 
 }
 
