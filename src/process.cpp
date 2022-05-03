@@ -12,18 +12,23 @@ using std::stol;
 using std::to_string;
 using std::vector;
 
-// Constructor
+// Constructor: initializes pid and computes cpu utilization.
 Process::Process(int pid) : pid_(pid) {
-    cpu_util_ = Process::CpuUtilization();
+    Process::CpuUtilization(pid);
 };
 
 // TODO: Return this process's ID
 int Process::Pid() const { return pid_; }
 
 // TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { 
+float Process::CpuUtilization() { return cpu_util_; }
+
+// Compute process CPU utilization 
+void Process::CpuUtilization(int pid) { 
     // Get processor timing info (clock ticks) from /proc/pid/stat
-    string file_path = LinuxParser::kProcDirectory + to_string(pid_) + LinuxParser::kStatFilename;
+    string file_path = LinuxParser::kProcDirectory 
+                       + to_string(pid) 
+                       + LinuxParser::kStatFilename;
     vector<string> values = LinuxParser::ReadSingleRow(file_path);
 
     // tottime = utime + stime + cutime + cstime
@@ -46,7 +51,7 @@ float Process::CpuUtilization() {
     {
         cpu = 0.0;
     }
-    return cpu;
+    cpu_util_ = cpu;
 }
 
 // TODO: Return the command that generated this process
