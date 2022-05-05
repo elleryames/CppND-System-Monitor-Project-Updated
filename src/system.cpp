@@ -27,9 +27,9 @@ Processor& System::Cpu() {
 
 // Initialize each process with its PID.
 void System::InitProcesses(){
-    vector<int> pids = LinuxParser::Pids();
-    for (auto& pid : pids){
-        processes_.push_back(Process(pid));
+    const vector<int> pids = LinuxParser::Pids();
+    for (const auto& pid : pids){
+        processes_.emplace_back(pid);
     }
 }
 // TODO: Return a container composed of the system's processes
