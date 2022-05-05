@@ -22,6 +22,8 @@ public:
 private:
   int pid_;
   float cpu_util_ {0.0};
+  // Other variables
+  std::size_t commandStringLength{40};
 };
 
 #endif

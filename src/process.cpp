@@ -56,7 +56,12 @@ void Process::CpuUtilization(int pid) {
 
 // TODO: Return the command that generated this process
 string Process::Command() const { 
-    return LinuxParser::Command(pid_); 
+    string cmd = LinuxParser::Command(pid_); 
+    if (cmd.length() > commandStringLength){
+        cmd = cmd.substr(0, commandStringLength);
+        cmd += "...";
+    }
+    return cmd;
 }
 
 // TODO: Return this process's memory utilization
