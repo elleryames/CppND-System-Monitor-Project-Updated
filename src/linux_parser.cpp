@@ -52,7 +52,7 @@ string LinuxParser::OperatingSystem() {
       std::replace(line.begin(), line.end(), '"', ' ');
       std::istringstream linestream(line);
       while (linestream >> key >> value) {
-        if (key == "PRETTY_NAME") {
+        if (key == keyOSPrettyName) {
           std::replace(value.begin(), value.end(), '_', ' ');
           return value;
         }
@@ -106,10 +106,10 @@ float LinuxParser::MemoryUtilization() {
     while (std::getline(stream, line)){
         std::istringstream linestream(line);
         linestream >> key >> value >> kb;
-        if (key == "MemTotal:") { MemTotal = stol(value); }
-        if (key == "MemFree:")  { MemFree  = stol(value); }
-        if (key == "Buffers:")  { Buffers  = stol(value); }
-        if (key == "Cached:")   { Cached   = stol(value); }
+        if (key == keyMemTotal)   { MemTotal = stol(value); }
+        if (key == keyMemFree)    { MemFree  = stol(value); }
+        if (key == keyMemBuffers) { Buffers  = stol(value); }
+        if (key == keyMemCached)  { Cached   = stol(value); }
     }
   }
 
@@ -166,7 +166,7 @@ vector<string> LinuxParser::CpuUtilization() {
 // TODO: Read and return the total number of processes
 // See bottom of file /proc/stat
 int LinuxParser::TotalProcesses() {
-  string value_ = ReadValue(kProcDirectory + kStatFilename, "processes");
+  string value_ = ReadValue(kProcDirectory + kStatFilename, keyProcesses);
   if (!value_.empty()){
     return stoi(value_);
   }
@@ -176,7 +176,7 @@ int LinuxParser::TotalProcesses() {
 // TODO: Read and return the number of running processes
 // See bottom of file /proc/stat
 int LinuxParser::RunningProcesses() {
-  string value_ = ReadValue(kProcDirectory + kStatFilename, "procs_running");
+  string value_ = ReadValue(kProcDirectory + kStatFilename, keyRunningProcesses);
   if (!value_.empty()){
     return stoi(value_);
   }
@@ -210,7 +210,7 @@ string LinuxParser::Ram(int pid) {
     while (std::getline(stream, line)){
         std::istringstream linestream(line);
         linestream >> key >> value >> kb;
-        if (key == "VmSize:") {  ram_in_kb = stol(value); }
+        if (key == keyProcMem) {  ram_in_kb = stol(value); }
     }
   }
   return to_string(static_cast<int>(std::round(ram_in_kb * 0.001))); 
@@ -220,7 +220,7 @@ string LinuxParser::Ram(int pid) {
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Uid(int pid) { 
   string file_path = kProcDirectory + std::to_string(pid) + kStatusFilename;
-  return ReadValue(file_path, "Uid:"); 
+  return ReadValue(file_path, keyUID); 
 }
 
 // TODO: Read and return the user associated with a process

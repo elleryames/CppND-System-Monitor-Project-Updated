@@ -18,6 +18,19 @@ const std::string kVersionFilename{"/version"};
 const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
 
+// File parsing keys
+const std::string keyProcesses("processes");
+const std::string keyRunningProcesses("procs_running");
+const std::string keyMemTotal("MemTotal:");
+const std::string keyMemFree("MemFree:");
+const std::string keyMemBuffers("Buffers:");
+const std::string keyMemCached("Cached:");
+const std::string keyCpu("cpu");
+const std::string keyOSPrettyName("PRETTY_NAME");
+const std::string keyUID("Uid:");
+const std::string keyProcMem("VmSize:"); // The string can be VmSize As well
+
+
 // System
 float MemoryUtilization();
 long int UpTime();
