@@ -12,7 +12,9 @@ using std::to_string;
 using std::vector;
 
 string LinuxParser::ReadValue(const string file_path, const string key){
-  string key_, value_, line_;
+  string key_;
+  string value_;
+  string line_;
   std::ifstream stream(file_path);
   if (stream.is_open()) {
     while (std::getline(stream, line_)){
@@ -26,7 +28,8 @@ string LinuxParser::ReadValue(const string file_path, const string key){
 
 // Returns first row in file_path as vector of strings.
 vector<string> LinuxParser::ReadSingleRow(string file_path) { 
-  string line, val;
+  string line; 
+  string val;
   vector<string> values;
   std::ifstream stream(file_path);
   if (stream.is_open()) {
@@ -64,7 +67,9 @@ string LinuxParser::OperatingSystem() {
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
-  string os, version, kernel;
+  string os;
+  string version;
+  string kernel;
   string line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
@@ -98,7 +103,9 @@ vector<int> LinuxParser::Pids() {
 // TODO: Read and return the system memory utilization
 // See data in /proc/meminfo
 float LinuxParser::MemoryUtilization() { 
-  string key, value, kb;
+  string key;
+  string value;
+  string kb;
   string line;
   long MemTotal, MemFree, MemUsed, Buffers, Cached;
   std::ifstream stream(kProcDirectory + kMeminfoFilename);
@@ -120,7 +127,8 @@ float LinuxParser::MemoryUtilization() {
 // TODO: Read and return the system uptime in seconds
 // See file /proc/uptime
 long int LinuxParser::UpTime() { 
-  string uptime, idle;
+  string uptime;
+  string idle;
   string line;
   std::ifstream stream(kProcDirectory + kUptimeFilename);
   if (stream.is_open()) {
@@ -150,7 +158,9 @@ long LinuxParser::IdleJiffies() { return 0; }
 // Reads first line of proc/stat and returns vector of strings representing cpuTimes from each column.
 vector<string> LinuxParser::CpuUtilization() { 
   std::vector<string> cpuTimes;
-  string line, cpuTime, cpu;
+  string line;
+  string cpuTime;
+  string cpu;
   std::ifstream stream(kProcDirectory + kStatFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
@@ -187,7 +197,8 @@ int LinuxParser::RunningProcesses() {
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Command(int pid) { 
-  string uptime, idle;
+  string uptime;
+  string idle;
   string line;
   std::ifstream stream(kProcDirectory + to_string(pid) + kCmdlineFilename);
   if (stream.is_open()) {
@@ -202,9 +213,11 @@ string LinuxParser::Command(int pid) {
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid) { 
-  string key, value, kb;
-  long ram_in_kb = 0;
+  string key;
+  string value;
+  string kb;
   string line;
+  long ram_in_kb = 0;
   std::ifstream stream(kProcDirectory + to_string(pid) + kStatusFilename);
   if (stream.is_open()) {
     while (std::getline(stream, line)){
