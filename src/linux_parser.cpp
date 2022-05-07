@@ -190,8 +190,7 @@ int LinuxParser::RunningProcesses() {
   if (!value_.empty()){
     return stoi(value_);
   }
-  return 0; 
-  return 0; 
+  return 0;
 }
 
 // TODO: Read and return the command associated with a process
