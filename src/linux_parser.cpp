@@ -23,6 +23,7 @@ string LinuxParser::ReadValue(const string file_path, const string key){
         if (key_ == key) { return value_; }
     }
   }
+  stream.close();
   return string();
 }
 
@@ -39,6 +40,7 @@ vector<string> LinuxParser::ReadSingleRow(string file_path) {
         values.push_back(val);
     }
   }
+  stream.close();
   return values;
 }
 
@@ -62,6 +64,7 @@ string LinuxParser::OperatingSystem() {
       }
     }
   }
+  filestream.close();
   return value;
 }
 
@@ -77,6 +80,7 @@ string LinuxParser::Kernel() {
     std::istringstream linestream(line);
     linestream >> os >> version >> kernel;
   }
+  stream.close();
   return kernel;
 }
 
@@ -119,7 +123,7 @@ float LinuxParser::MemoryUtilization() {
         if (key == keyMemCached)  { Cached   = stol(value); }
     }
   }
-
+  stream.close();
   MemUsed = MemTotal - MemFree;
   return static_cast<float>(MemUsed - (Buffers + Cached)) / MemTotal;
 }
@@ -137,6 +141,7 @@ long int LinuxParser::UpTime() {
     linestream >> uptime >> idle;
     return stol(uptime);
   }
+  stream.close();
   return 0; 
 }
 
@@ -169,7 +174,8 @@ vector<string> LinuxParser::CpuUtilization() {
     while(linestream >> cpuTime){
         cpuTimes.push_back(cpuTime);
     }
-  }    
+  }
+  stream.close();
   return cpuTimes; 
 }
 
@@ -205,7 +211,8 @@ string LinuxParser::Command(int pid) {
     //std::istringstream linestream(line);
     //linestream >> uptime >> idle;
     return line;
-  }  
+  }
+  stream.close();
   return string(); 
 }
 
@@ -225,7 +232,10 @@ string LinuxParser::Ram(int pid) {
         if (key == keyProcMem) {  ram_in_kb = stol(value); }
     }
   }
-  return to_string(static_cast<int>(std::round(ram_in_kb * 0.001))); 
+  stream.close();
+  return to_string(
+    static_cast<int>(std::round(ram_in_kb * 0.001))
+    ); 
 }
 
 // TODO: Read and return the user ID associated with a process
@@ -253,6 +263,7 @@ string LinuxParser::User(int pid) {
       }
     }
   }
+  filestream.close();
   return string(); 
 }
 
