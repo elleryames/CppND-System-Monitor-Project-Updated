@@ -28,7 +28,7 @@ const std::string keyMemCached("Cached:");
 const std::string keyCpu("cpu");
 const std::string keyOSPrettyName("PRETTY_NAME");
 const std::string keyUID("Uid:");
-const std::string keyProcMem("VmSize:");
+const std::string keyProcMem("VmRSS:"); // Use VmRSS instead of VmSize. 
 
 // System
 float MemoryUtilization();
