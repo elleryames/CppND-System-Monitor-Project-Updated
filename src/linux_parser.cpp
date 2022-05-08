@@ -145,20 +145,6 @@ long int LinuxParser::UpTime() {
   return 0; 
 }
 
-// TODO: Read and return the number of jiffies for the system
-// A jiffie is a unit of time used by the OS. 
-long LinuxParser::Jiffies() { return 0; }
-
-// TODO: Read and return the number of active jiffies for a PID
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
-
-// TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
-
-// TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
-
 // TODO: Read and return CPU utilization
 // Reads first line of proc/stat and returns vector of strings representing cpuTimes from each column.
 vector<string> LinuxParser::CpuUtilization() { 
