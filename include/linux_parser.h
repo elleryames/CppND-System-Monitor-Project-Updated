@@ -64,6 +64,8 @@ std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
+long int ActiveTime(int pid);
+const size_t numStatCols{52};
 
 // Helper functions
 std::string ReadValue(const std::string file_path, const std::string key); 

@@ -1,8 +1,8 @@
-#include <unistd.h>
 #include <cctype>
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 #include "process.h"
 #include "linux_parser.h"
@@ -25,30 +25,18 @@ float Process::CpuUtilization() { return cpu_util_; }
 
 // Compute process CPU utilization 
 void Process::CpuUtilization(int pid) { 
-    // Get processor timing info (clock ticks) from /proc/pid/stat
-    string file_path = LinuxParser::kProcDirectory 
-                       + to_string(pid) 
-                       + LinuxParser::kStatFilename;
-    vector<string> values = LinuxParser::ReadSingleRow(file_path);
-
-    // tottime = utime + stime + cutime + cstime
-    long int tottime = stol(values[13]) 
-                     + stol(values[14])
-                     + stol(values[15])
-                     + stol(values[16]);
-    tottime = tottime / sysconf(_SC_CLK_TCK);
-
+    // Get processor timing info (seconds)
+    long int tottime = LinuxParser::ActiveTime(pid);
+    
     // get time (seconds) that process has been running
     long int runtime = Process::UpTime();
 
     // cpu utilization is fraction of run time using cpu.
-    float cpu = 0.0;
-    try
-    {
-        cpu = static_cast<float>(tottime) / runtime;
+    float cpu;
+    if (runtime != 0){
+        cpu = (float)tottime / runtime;
     }
-    catch(...)
-    {
+    else {
         cpu = 0.0;
     }
     cpu_util_ = cpu;

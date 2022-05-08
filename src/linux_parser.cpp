@@ -274,7 +274,41 @@ long int LinuxParser::UpTime(int pid) {
   const string file_path = kProcDirectory + to_string(pid) + kStatFilename;
   const vector<string> values = ReadSingleRow(file_path);
 
+  // if length is not 52, then there is a problem, return 0.
+  if (values.size() != LinuxParser::numStatCols){
+    return 0;
+  }
+
   // starttime is the 22nd entry in the file.
   long int proc_starttime = stol(values[21]) / sysconf(_SC_CLK_TCK);
   return UpTime() - proc_starttime;
+}
+
+// Returns active time in seconds.
+// Extracts (utime + stime + cutime + cstime) in clock ticks for process and divides by system clock ticks per second. 
+// Method returns 0 if the number of entries in the vector 'values' read from [pid]/stat file is not LinuxParser::numStatCol = 52. 
+long int LinuxParser::ActiveTime(int pid) {
+  long int total_clock_ticks;
+  string file_path = LinuxParser::kProcDirectory 
+                      + to_string(pid) 
+                      + LinuxParser::kStatFilename;
+  vector<string> values = LinuxParser::ReadSingleRow(file_path);
+
+  // if length is not 52, then there is a problem (e.g. process was terminated)
+  if (values.size() != LinuxParser::numStatCols){
+    return 0;
+  }
+  // tottime = utime + stime + cutime + cstime
+  try
+  {
+    total_clock_ticks = stol(values[13]) 
+                      + stol(values[14])
+                      + stol(values[15])
+                      + stol(values[16]);
+  }
+  catch(...) // any other failures
+  {
+    total_clock_ticks = 0;
+  }
+  return total_clock_ticks / sysconf(_SC_CLK_TCK);
 }
