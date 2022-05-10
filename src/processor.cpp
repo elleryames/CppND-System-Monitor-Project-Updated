@@ -15,13 +15,14 @@ float Processor::Utilization() {
   long total, totIdle, nonIdle;
   float cpuUtil;
 
-  // CPU Columns: cpuUser, cpuNice, cpuSystem, cpuIdle, cpuIOwait, 
+  // CPU Columns: (string) cpu, 
+  //              cpuUser, cpuNice, cpuSystem, cpuIdle, cpuIOwait, 
   //              cpuIRQ, cpuSoftIRQ, cpuSteal, cpuGuest, cpuGuestNice
   std::vector<string> cpuTimes_string = LinuxParser::CpuUtilization();
-  std::vector<long> cpuTimes(cpuTimes_string.size());
+  std::vector<long> cpuTimes(cpuTimes_string.size() - 1);
 
-  // Populate cpuTimes
-  std::transform(cpuTimes_string.begin(), cpuTimes_string.end(), 
+  // Convert numeric columns to long
+  std::transform(cpuTimes_string.begin() + 1, cpuTimes_string.end(), 
                  cpuTimes.begin(), [](string s){return stol(s);});
 
   // Guest times are included in corresponding cpu times.
