@@ -64,6 +64,10 @@ long int ActiveTime(int pid);
 const size_t numStatCols{52};
 
 // Helper functions
+template <typename T>
+T keyToValue(std::string const& file_path, std::string const& key);
+template <typename T>
+std::vector<T> rowToVector(std::string const& file_path);
 std::string ReadValue(const std::string file_path, const std::string key); 
 std::vector<std::string> ReadSingleRow(const std::string file_path);
 };  // namespace LinuxParser

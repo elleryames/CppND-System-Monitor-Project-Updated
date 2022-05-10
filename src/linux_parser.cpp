@@ -11,6 +11,41 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+template <typename T>
+T LinuxParser::keyToValue(string const& file_path, string const& key) {
+  string key_;
+  string line_;
+  T value_;
+  std::ifstream stream(file_path);
+  if (stream.is_open()) {
+    while (std::getline(stream, line_)){
+        std::istringstream linestream(line_);
+        linestream >> key_ >> value_;
+        if (key_ == key) { return value_; }
+    }
+  }
+  stream.close();
+  return string();
+}
+
+template <typename T>
+vector<T> LinuxParser::rowToVector(string const& file_path) {
+  string line; 
+  string val;
+  vector<T> values;
+  std::ifstream stream(file_path);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);    
+    while(linestream >> val){
+        values.push_back(val);
+    }
+  }
+  stream.close();
+  return values;
+}
+
+
 string LinuxParser::ReadValue(const string file_path, const string key){
   string key_;
   string value_;
@@ -68,20 +103,13 @@ string LinuxParser::OperatingSystem() {
   return value;
 }
 
-// DONE: An example of how to read data from the filesystem
+// Read Linux Kernel from /proc/version. 
+// File starts out:
+// Linux version <kernel-id>
 string LinuxParser::Kernel() {
-  string os;
-  string version;
-  string kernel;
-  string line;
-  std::ifstream stream(kProcDirectory + kVersionFilename);
-  if (stream.is_open()) {
-    std::getline(stream, line);
-    std::istringstream linestream(line);
-    linestream >> os >> version >> kernel;
-  }
-  stream.close();
-  return kernel;
+  vector<string> values 
+    = rowToVector<string>(kProcDirectory + kVersionFilename);
+  return values[2];
 }
 
 // BONUS: Update this to use std::filesystem (available in gcc-17, and provides a cleaner solution)
