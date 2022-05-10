@@ -11,7 +11,8 @@ using std::stof;
 using std::string;
 using std::to_string;
 using std::vector;
-
+// ------------------------------------------------------------------------
+// Helper function that gets value specified by key.
 template <typename T>
 T LinuxParser::keyToValue(string const& filename, string const& key) {
   string key_;
@@ -28,7 +29,8 @@ T LinuxParser::keyToValue(string const& filename, string const& key) {
   stream.close();
   return value_;
 }
-
+// ------------------------------------------------------------------------
+// Helper function that returns first line of file as vector
 template <typename T>
 vector<T> LinuxParser::rowToVector(string const& filename) {
   string line; 
@@ -45,8 +47,8 @@ vector<T> LinuxParser::rowToVector(string const& filename) {
   stream.close();
   return values;
 }
-
-// DONE: An example of how to read data from the filesystem
+// ------------------------------------------------------------------------
+// Read and return name of operating system
 string LinuxParser::OperatingSystem() {
   string line;
   string key;
@@ -69,16 +71,16 @@ string LinuxParser::OperatingSystem() {
   filestream.close();
   return value;
 }
-
+// ------------------------------------------------------------------------
 // Read Linux Kernel from /proc/version. 
-// File starts out:
+// First three entries of file are:
 // Linux version <kernel-id>
 string LinuxParser::Kernel() {
   vector<string> values 
     = rowToVector<string>(kVersionFilename);
   return values[2];
 }
-
+// ------------------------------------------------------------------------
 // BONUS: Update this to use std::filesystem (available in gcc-17, and provides a cleaner solution)
 vector<int> LinuxParser::Pids() {
   vector<int> pids;
@@ -98,8 +100,8 @@ vector<int> LinuxParser::Pids() {
   closedir(directory);
   return pids;
 }
-
-// TODO: Read and return the system memory utilization
+// ------------------------------------------------------------------------
+// Read and return the system memory utilization
 // See data in /proc/meminfo
 float LinuxParser::MemoryUtilization() { 
   long MemTotal = keyToValue<long>(kMeminfoFilename, keyMemTotal);
@@ -109,35 +111,34 @@ float LinuxParser::MemoryUtilization() {
   long MemUsed  = MemTotal - MemFree;
   return static_cast<float>(MemUsed - (Buffers + Cached)) / MemTotal;
 }
-
-// TODO: Read and return the system uptime in seconds
+// ------------------------------------------------------------------------
+// Read and return the system uptime in seconds
 // See file /proc/uptime
 long int LinuxParser::UpTime() { 
   vector<long> values 
     = rowToVector<long>(kUptimeFilename);
   return values[0];
 }
-
-// TODO: Read and return CPU utilization
+// ------------------------------------------------------------------------
+// Read and return CPU utilization
 // Reads first line of proc/stat and returns vector of strings representing cpuTimes from each column.
 vector<string> LinuxParser::CpuUtilization() { 
   return rowToVector<string>(kStatFilename);
 }
-
-// TODO: Read and return the total number of processes
+// ------------------------------------------------------------------------
+// Read and return the total number of processes
 // See bottom of file /proc/stat
 int LinuxParser::TotalProcesses() {
   return keyToValue<int>(kStatFilename, keyProcesses);
 }
-
-// TODO: Read and return the number of running processes
+// ------------------------------------------------------------------------
+// Read and return the number of running processes
 // // See bottom of file /proc/stat
 int LinuxParser::RunningProcesses() {
   return keyToValue<int>(kStatFilename, keyRunningProcesses);
 }
-
-// TODO: Read and return the command associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+// ------------------------------------------------------------------------
+// Read and return the command associated with a process
 string addSpace(string const& a, string const& b){
   return a + " " + b;
 }
@@ -152,9 +153,8 @@ string LinuxParser::Command(int pid) {
   }
   return out; 
 }
-
-// TODO: Read and return the memory used by a process
-// REMOVE: [[maybe_unused]] once you define the function
+// ------------------------------------------------------------------------
+// Read and return the memory used by a process
 // Parse /proc/[pid]/status using key VmRSS
 string LinuxParser::Ram(int pid) {
   long int ram_kb = keyToValue<long int>(to_string(pid) + kStatusFilename, 
@@ -163,15 +163,13 @@ string LinuxParser::Ram(int pid) {
     static_cast<int>(std::round(ram_kb * 0.001))
     );                                         
 }
-
-// TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+// ------------------------------------------------------------------------
+// Read and return the user ID associated with a process
 string LinuxParser::Uid(int pid) {
   return keyToValue<string>(to_string(pid) + kStatusFilename, keyUID);
 }
-
-// TODO: Read and return the user associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+// ------------------------------------------------------------------------
+// Read and return the user associated with a process
 string LinuxParser::User(int pid) { 
   // Get user id for process.
   string uid = Uid(pid);
@@ -191,8 +189,8 @@ string LinuxParser::User(int pid) {
   filestream.close();
   return string(); 
 }
-
-// TODO: Read and return the uptime of a process
+// ------------------------------------------------------------------------
+// Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long int LinuxParser::UpTime(int pid) { 
   // Get process timing info (clock ticks) from /proc/pid/stat
@@ -208,7 +206,7 @@ long int LinuxParser::UpTime(int pid) {
   long int proc_starttime = stol(values[21]) / sysconf(_SC_CLK_TCK);
   return UpTime() - proc_starttime;
 }
-
+// ------------------------------------------------------------------------
 // Returns active time in seconds.
 // Extracts (utime + stime + cutime + cstime) in clock ticks for process and divides by system clock ticks per second. 
 // Method returns 0 if the number of entries in the vector 'values' read from [pid]/stat file is not LinuxParser::numStatCol = 52. 
@@ -234,3 +232,4 @@ long int LinuxParser::ActiveTime(int pid) {
   }
   return total_clock_ticks / sysconf(_SC_CLK_TCK);
 }
+// ------------------------------------------------------------------------
