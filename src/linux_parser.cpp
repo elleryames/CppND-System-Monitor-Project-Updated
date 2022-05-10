@@ -46,39 +46,6 @@ vector<T> LinuxParser::rowToVector(string const& filename) {
   return values;
 }
 
-// string LinuxParser::ReadValue(const string file_path, const string key){
-//   string key_;
-//   string value_;
-//   string line_;
-//   std::ifstream stream(file_path);
-//   if (stream.is_open()) {
-//     while (std::getline(stream, line_)){
-//         std::istringstream linestream(line_);
-//         linestream >> key_ >> value_;
-//         if (key_ == key) { return value_; }
-//     }
-//   }
-//   stream.close();
-//   return string();
-// }
-
-// // Returns first row in file_path as vector of strings.
-// vector<string> LinuxParser::ReadSingleRow(string file_path) { 
-//   string line; 
-//   string val;
-//   vector<string> values;
-//   std::ifstream stream(file_path);
-//   if (stream.is_open()) {
-//     std::getline(stream, line);
-//     std::istringstream linestream(line);    
-//     while(linestream >> val){
-//         values.push_back(val);
-//     }
-//   }
-//   stream.close();
-//   return values;
-// }
-
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
